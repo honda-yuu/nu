@@ -13,13 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('flowers', function (Blueprint $table) {
             $table->id();
-            $table->string('title', 50);
-            $table->string('body', 200);
-            $table->foreignId('category_id')->constrained();
+            $table->string('name',50);
+            $table->string('flower_mean', 100);
+            $table->integer('money');
+            $table->foreignId('month_id')->constrained()->onDelete('cascade');
+            $table->string('image', 100)->nullable();
             $table->timestamps();
-            $table->softDeletes();
+
         });
     }
 
@@ -30,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('flowers');
     }
 };
