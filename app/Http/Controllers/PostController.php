@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
-use App\Models\Category;
+// use App\Models\Category;
+use Cloudinary;  //use宣言追加
 
 class PostController extends Controller
 {
@@ -13,19 +14,22 @@ class PostController extends Controller
         return view('posts/index')->with(['posts' => $post->getPaginateByLimit()]);
     }
 
-    public function show(Post $post)
-    {
-        return view('posts/show')->with(['post' => $post]);
-    }
+    // public function show(Post $post)
+    // {
+    //     return view('posts/show')->with(['post' => $post]);
+    // }
 
-    public function create(Category $category)
+    public function create()
     {
-        return view('posts/create')->with(['categories' => $category->get()]);
+       
+        return view('posts/create'); //create.blade.phpを表示
     }
 
     public function store(Post $post, Request $request)
     {
         $input = $request['post'];
+        $image_url = Cloudinary::upload($request->file('image')->getRealPath())->getSecurePath();//追加
+        $input += ['image_url' => $image_url];  //追加
         $post->fill($input)->save();
         return redirect('/posts/' . $post->id);
     }
