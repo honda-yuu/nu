@@ -33,5 +33,8 @@ Route::middleware('auth')->group(function () {
 Route::get('/posts/create', [PostController::class, 'create']);  //投稿フォームの表示
 Route::post('/posts', [PostController::class, 'store']);  //画像を含めた投稿の保存処理
 Route::get('/posts', [PostController::class, 'index']);  //作成した投稿一覧を表示
+Route::get('/posts/{post}/edit', [PostController::class, 'edit']);
+Route::put('/posts/{post}', [PostController::class, 'update']);
+Route::delete('/posts/{post}', [PostController::class,'delete']);
 
 require __DIR__.'/auth.php';
