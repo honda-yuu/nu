@@ -12,7 +12,7 @@ class PostController extends Controller
 {
     public function index(Post $post)
     {
-        // $posts=Post::where('user_id',\Auth::user()->id)->get();
+        $posts=Post::where('user_id',\Auth::user()->id)->get();
         return view('posts/index')->with(['posts' => $post->getPaginateByLimit()]);
     }
 
@@ -33,6 +33,8 @@ class PostController extends Controller
         $input_post += ['image_url' => $image_url];  //追加
         
         $input_months=$request->months_array; //months_arrayはnameで設定した配列
+        $post->user_id = $request->user()->id;
+        
         
         //先にpostsテーブルにデータを保存
         $post->fill($input_post)->save();
@@ -42,17 +44,36 @@ class PostController extends Controller
         return redirect('/posts');
     }
 
-    public function edit(Post $post)
+    public function edit(Post $post, Month $month)
     {
-        return view('posts/edit')->with(['post' => $post]);
+        $checked_months = [];
+        foreach($post->months as $month){
+            $checked_months[] = $month->id;
+        }
+        return view('posts/edit')->with(['post' => $post, 'months' => $month->get(), 'checked_months' => $checked_months ]);
     }
 
     public function update(Request $request, Post $post)
     {
         $input_post = $request['post'];
+        if ($request->file('image')){
+            $image_url = Cloudinary::upload($request->file('image')->getRealPath())->getSecurePath();//追加
+            $input_post += ['image_url' => $image_url];
+        }
+        
+        $input_months=$request->months_array; //months_arrayはnameで設定した配列
+        
         $post->fill($input_post)->save();
+        //syncメソッドを使って中間テーブルに、上の$postのidと対応する月のid配列$input_monthsを上書き保存
+        $post->months()->sync($input_months);
 
-        return redirect('/posts/' . $post->id);
+        return redirect('/posts');
+    }
+    
+    public function delete(Post $post)
+    {
+        $post->delete();
+        return redirect('/posts');
     }
 
 }
