@@ -8,6 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     use HasFactory;
+    
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+    
+    public function Months()
+    {
+        //1つの投稿が多数の月を所持
+        return $this->belongsToMany(Month::class);
+    }
 
     protected $fillable = [
         'title',
@@ -20,11 +30,8 @@ class Post extends Model
     public function getPaginateByLimit(int $limit_count = 5)
     {
         // updated_atで降順に並べたあと、limitで件数制限をかける
-        return $this::with('category')->orderBy('updated_at', 'DESC')->paginate($limit_count);
+        return $this::with('months')->orderBy('updated_at', 'DESC')->paginate($limit_count);
     }
 
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
+    
 }
