@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+
+
+
 use App\Models\Month;
 // use App\Models\Category;
 use Cloudinary;  //use宣言追加
+
 
 class PostController extends Controller
 {
@@ -88,5 +92,20 @@ class PostController extends Controller
         $post->delete();
         return redirect('/posts');
     }
+    
+    public function flowerindex(Request $request , Flower $flower)
+    {
+        $keyword = $request->input('keyword');
+        
+        $query = Flower::query();
+        
+        if(!empty($keyword)){
+            $query->where('name', 'LIKE', "%{$keyword}%");
+        }
+        $flowers = $query->get(); 
+       
+        return view('posts/flowerindex')->with(['keyword'=> $keyword, 'flowers' => $flowers]);
+    }
+    
 
 }
