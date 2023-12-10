@@ -36,5 +36,6 @@ Route::get('/posts', [PostController::class, 'index']);  //作成した投稿一
 Route::get('/posts/{post}/edit', [PostController::class, 'edit']);
 Route::put('/posts/{post}', [PostController::class, 'update']);
 Route::delete('/posts/{post}', [PostController::class,'delete']);
+Route::get('/posts/search', [PostController::class, 'search']);
 
 require __DIR__.'/auth.php';
