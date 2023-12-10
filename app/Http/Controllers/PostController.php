@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Category;
+use App\Models\Flower;
 
 class PostController extends Controller
 {
@@ -42,5 +43,20 @@ class PostController extends Controller
 
         return redirect('/posts/' . $post->id);
     }
+    
+    public function flowerindex(Request $request , Flower $flower)
+    {
+        $keyword = $request->input('keyword');
+        
+        $query = Flower::query();
+        
+        if(!empty($keyword)){
+            $query->where('name', 'LIKE', "%{$keyword}%");
+        }
+        $flowers = $query->get(); 
+       
+        return view('posts/flowerindex')->with(['keyword'=> $keyword, 'flowers' => $flowers]);
+    }
+    
 
 }
