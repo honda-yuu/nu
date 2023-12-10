@@ -15,6 +15,15 @@
                     <x-nav-link :href="route('flowerindex')" :active="request()->routeIs('flowerindex')">
                         花言葉検索
                     </x-nav-link>
+                    <x-nav-link :href="route('search')" :active="request()->routeIs('search')">
+                        投稿検索
+                    </x-nav-link>
+                    <x-nav-link :href="route('create')" :active="request()->routeIs('create')">
+                        投稿作成
+                    </x-nav-link>
+                    <x-nav-link :href="route('index')" :active="request()->routeIs('index')">
+                        投稿一覧
+                    </x-nav-link>
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
