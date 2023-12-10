@@ -7,8 +7,18 @@
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
     </head>
     <body>
-        <h1>作成した投稿一覧</h1>
-        <a href='/posts/create'>新規投稿</a>
+        <h1>投稿検索</h1>
+       <form method="get" action="/posts/search" class="d-inline-block w-75">
+            <div class="form-group ">
+                <div class="input-group">
+                    <input type="text" name="keyword" class="form-control" placeholder="検索"  value="{{ request()->input('keyword') }}"autocomplete="on">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-success">検索</button>
+                    </div>
+                </div>
+            </div>
+         </form>
+       
         <div>
             @foreach ($posts as $post)
                 <div style='border:solid 1px; margin-bottom: 10px;'>
@@ -29,26 +39,8 @@
                     イメージ画像：
                     <img src="{{ $post->image_url }}" alt="画像が読み込めません。"/>
                 </div>
-                <div class="edit"><a href="/posts/{{ $post->id }}/edit">編集</a></div>
-                <form action="/posts/{{ $post->id }}" id="form_{{ $post->id }}" method="post">
-                    @csrf
-                    @method('DELETE')
-                    <button type="button" onclick="deletePost({{ $post->id }})">削除</button> 
-                </form>
             @endforeach
         </div>
-        <div>
-            {{ $posts->links() }}
-        </div>
         
-        <script>
-            function deletePost(id) {
-                'use strict'
-        
-                if (confirm('削除すると復元できません。\n本当に削除しますか？')) {
-                    document.getElementById(`form_${id}`).submit();
-                }
-            }
-        </script>
     </body>
 </html>
