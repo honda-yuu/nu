@@ -70,6 +70,19 @@ class PostController extends Controller
         return redirect('/posts');
     }
     
+    public function search(Request $request, Post $post)
+    {
+        $keyword = $request->input('keyword');
+        $query = Post::query();
+         if(!empty($keyword))
+         {
+            $query->where('body', 'LIKE', "%{$keyword}%");
+        }
+        
+        $posts = $query->get();
+        return view('/posts/search')->with(['keyword'=> $keyword, 'posts' => $posts]);
+    }
+    
     public function delete(Post $post)
     {
         $post->delete();
